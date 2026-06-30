@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>할 일 관리</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ── 사이드바 ────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">T</div>
+    <nav class="sidebar__nav">
+      <button class="nav-item nav-item--active" title="할 일">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+      </button>
+      <button class="nav-item" title="통계 (준비 중)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+      </button>
+      <button class="nav-item" title="설정 (준비 중)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- ── 메인 ────────────────────────────────── -->
+  <div class="main">
+
+    <!-- 상단 바 -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <h1 class="topbar__title">할 일 관리</h1>
+      </div>
+      <div class="topbar__chips">
+        <span class="chip">전체 <b id="stat-total">0</b></span>
+        <span class="chip">진행 중 <b id="stat-active">0</b></span>
+        <span class="chip chip--done">완료 <b id="stat-done">0</b></span>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- 요약 카드 -->
+      <div class="cards">
+        <div class="card">
+          <p class="card__label">전체 할 일</p>
+          <p class="card__value" id="sum-total">0</p>
+        </div>
+        <div class="card">
+          <p class="card__label">진행 중</p>
+          <p class="card__value card__value--active" id="sum-active">0</p>
+        </div>
+        <div class="card">
+          <p class="card__label">완료</p>
+          <p class="card__value card__value--done" id="sum-done">0</p>
+        </div>
+        <div class="card card--progress">
+          <p class="card__label">완료율</p>
+          <p class="card__value" id="sum-pct">0%</p>
+          <div class="progress-bar">
+            <div class="progress-bar__fill" id="sum-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 도구 모음 -->
+      <div class="toolbar">
+        <div class="toolbar__left">
+          <label class="search-box">
+            <svg class="search-box__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input class="search-box__input" id="search-input" type="text" placeholder="할 일 검색..." />
+          </label>
+          <div class="filter-tabs">
+            <button class="filter-tab filter-tab--active" data-filter="all">전체</button>
+            <button class="filter-tab" data-filter="active">진행 중</button>
+            <button class="filter-tab" data-filter="completed">완료</button>
+          </div>
+          <select class="select" id="filter-category">
+            <option value="">카테고리 전체</option>
+            <option value="업무">업무</option>
+            <option value="개인">개인</option>
+            <option value="공부">공부</option>
+          </select>
+        </div>
+        <div class="toolbar__right">
+          <button class="btn-text-danger" id="clear-done-btn">완료 삭제</button>
+          <button class="btn-primary" id="add-toggle-btn">+ 할 일 추가</button>
+        </div>
+      </div>
+
+      <!-- 추가 폼 (기본 숨김) -->
+      <div class="add-form" id="add-form" hidden>
+        <input class="add-form__input" id="todo-input" type="text" placeholder="할 일을 입력하세요" autocomplete="off" />
+        <select class="add-form__select" id="category-select">
+          <option value="업무">업무</option>
+          <option value="개인">개인</option>
+          <option value="공부">공부</option>
+        </select>
+        <select class="add-form__select" id="priority-select">
+          <option value="보통">보통</option>
+          <option value="긴급">긴급</option>
+          <option value="낮음">낮음</option>
+        </select>
+        <input class="add-form__date" id="due-date" type="date" title="마감일" />
+        <button class="btn-primary" id="submit-btn">추가</button>
+        <button class="btn-ghost" id="cancel-btn">취소</button>
+      </div>
+
+      <!-- 테이블 -->
+      <div class="table-wrap">
+        <table class="todo-table">
+          <thead>
+            <tr>
+              <th class="th-check"></th>
+              <th class="th-title">할 일</th>
+              <th class="th-cat">카테고리</th>
+              <th class="th-pri">우선순위</th>
+              <th class="th-due">마감일</th>
+              <th class="th-act">액션</th>
+            </tr>
+          </thead>
+          <tbody id="todo-tbody"></tbody>
+        </table>
+        <p class="empty-msg" id="empty-message">할 일이 없습니다.</p>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script src="script.js"></script>
+</body>
+</html>
