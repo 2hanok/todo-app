@@ -319,6 +319,7 @@ body {
 }
 
 .btn-text-danger:hover { background: #FEF2F2; }
+.btn-text-danger:disabled { color: var(--text-3); cursor: not-allowed; background: transparent; }
 
 /* ── Add Form ─────────────────────────────────── */
 .add-form {
@@ -332,6 +333,8 @@ body {
   padding: 12px 16px;
   animation: slide-in 0.18s ease;
 }
+
+.add-form[hidden] { display: none; }   /* v1.1: hidden 속성이 display:flex에 덮여 폼이 항상 보이던 문제 */
 
 @keyframes slide-in {
   from { opacity: 0; transform: translateY(-6px); }
@@ -555,10 +558,177 @@ tr.overdue .due-cell {
   display: none;
 }
 
+/* ── v1.1: 빠른 필터·정렬 (#2) ───────────────── */
+.version-tag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: #EEF2FF;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.filter-tab .count {
+  display: inline-block;
+  min-width: 18px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: #F3F4F6;
+  color: var(--text-2);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.filter-tab--active .count { background: #E0E7FF; color: #4338CA; }
+.filter-tab--danger.filter-tab--active { background: #FEF2F2; color: var(--danger); }
+.filter-tab--danger.filter-tab--active .count { background: #FEE2E2; color: var(--danger); }
+
+.inline-label {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 4px;
+  font-size: 0.8125rem;
+  color: var(--text-2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.check-label input { accent-color: var(--danger); width: 14px; height: 14px; cursor: pointer; }
+
+.btn-ghost--sm { padding: 0 10px; font-size: 0.75rem; white-space: nowrap; background: var(--white); }
+
+.todo-table th.sortable { cursor: pointer; user-select: none; }
+.todo-table th.sortable:hover { color: var(--text-1); background: #F3F4F6; }
+.todo-table th.sortable:focus-visible { outline: 2px solid #93C5FD; outline-offset: -2px; }
+.todo-table th.th-sorted { color: #4338CA; }
+.sort-ind { font-size: 0.625rem; margin-left: 2px; }
+
+.today-tag {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--warning);
+  background: #FEF3C7;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ── v1.1: 편집 행 (#4) ───────────────────────── */
+.todo-table tbody tr.editing td { background: #F5F7FF; }
+.todo-table tbody tr.editing:hover td { background: #F5F7FF; }
+
+.edit-select,
+.edit-date {
+  width: 100%;
+  height: 28px;
+  padding: 0 6px;
+  border: 1.5px solid #C7D2FE;
+  border-radius: 6px;
+  background: var(--white);
+  font-size: 0.8125rem;
+  color: var(--text-1);
+}
+
+.edit-select:focus,
+.edit-date:focus,
+.edit-input:focus { outline: none; border-color: #6366F1; box-shadow: 0 0 0 2px #E0E7FF; }
+
+.btn-row--save   { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+.btn-row--save:hover { background: var(--accent-h); }
+.btn-row--cancel { border: 1px solid var(--border); color: var(--text-2); }
+.btn-row--cancel:hover { background: #F3F4F6; }
+
+/* ── v1.1: 실행 취소 토스트 (#5) ─────────────── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 12px 12px 18px;
+  background: #1F2937;
+  color: #F9FAFB;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.22);
+  font-size: 0.875rem;
+  overflow: hidden;
+  z-index: 100;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.toast[hidden] { display: none; }
+.toast--show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.toast__msg { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.toast__undo {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: #3B82F6;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.toast__undo:hover { background: #2563EB; }
+
+.toast__close {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #9CA3AF;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.toast__close:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+.toast__bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: #60A5FA;
+  transform-origin: left;
+}
+
+.toast--show .toast__bar { animation: toast-countdown 5s linear forwards; }
+
+@keyframes toast-countdown {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 960px) {
   .cards { grid-template-columns: repeat(2, 1fr); }
   .th-due, .todo-table td:nth-child(5) { display: none; }
+  .todo-table tr.editing td:nth-child(5) { display: table-cell; }
 }
 
 @media (max-width: 640px) {
@@ -573,4 +743,16 @@ tr.overdue .due-cell {
   .th-cat, .todo-table td:nth-child(3),
   .th-pri, .todo-table td:nth-child(4) { display: none; }
   .search-box__input { width: 110px; }
+  .todo-table tr.editing td { display: table-cell; }
+  .toolbar--sub .toolbar__right { justify-content: flex-start; }
+  .filter-tabs { max-width: 100%; overflow-x: auto; }
+  #due-tabs .filter-tab { padding: 0 9px; }
+  /* 모바일 편집 행: 내용(전체 폭) / 카테고리·우선순위·마감일 / 버튼 (script.js가 colspan 스택으로 렌더링) */
+  .todo-table td.edit-stack-cell { display: table-cell; padding: 10px 12px; }
+  .edit-stack { display: flex; flex-direction: column; gap: 8px; }
+  .edit-stack .edit-input { height: 34px; }
+  .edit-stack__fields { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 6px; }
+  .edit-stack .edit-select, .edit-stack .edit-date { height: 32px; }
+  .edit-stack .row-actions { justify-content: flex-end; }
+  .edit-stack .btn-row { height: 30px; padding: 0 16px; }
 }

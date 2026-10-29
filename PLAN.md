@@ -1,5 +1,8 @@
 # PLAN: 할 일 관리 웹페이지 구현 흐름
 
+> **이력 문서(v1.0 초기 구현 계획)입니다.** 실제 구현은 이후 `index.html`·`script.js`·`style.css` 3분할로 확장되었습니다.
+> 현재 기준: 요구사항 `PRD.md`(v1.1) · 구조 `docs/ARCHITECTURE.md` · 고도화 계획/검증 `docs/pdca/v1.1/` (01-plan → 03-check → 04-act)
+
 ## 파일 구성
 
 ```

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="version" content="1.1.0" />
   <title>할 일 관리</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -38,7 +39,7 @@
     <!-- 상단 바 -->
     <header class="topbar">
       <div class="topbar__left">
-        <h1 class="topbar__title">할 일 관리</h1>
+        <h1 class="topbar__title">할 일 관리 <span class="version-tag">v1.1</span></h1>
       </div>
       <div class="topbar__chips">
         <span class="chip">전체 <b id="stat-total">0</b></span>
@@ -81,7 +82,7 @@
             </svg>
             <input class="search-box__input" id="search-input" type="text" placeholder="할 일 검색..." />
           </label>
-          <div class="filter-tabs">
+          <div class="filter-tabs" id="status-tabs">
             <button class="filter-tab filter-tab--active" data-filter="all">전체</button>
             <button class="filter-tab" data-filter="active">진행 중</button>
             <button class="filter-tab" data-filter="completed">완료</button>
@@ -96,6 +97,29 @@
         <div class="toolbar__right">
           <button class="btn-text-danger" id="clear-done-btn">완료 삭제</button>
           <button class="btn-primary" id="add-toggle-btn">+ 할 일 추가</button>
+        </div>
+      </div>
+
+      <!-- 빠른 필터·정렬 (v1.1 #2) -->
+      <div class="toolbar toolbar--sub">
+        <div class="toolbar__left">
+          <div class="filter-tabs" id="due-tabs" role="group" aria-label="마감 빠른 필터">
+            <button class="filter-tab filter-tab--active" data-due="">전체 기간</button>
+            <button class="filter-tab" data-due="today">오늘 마감 <span class="count" id="due-count-today">0</span></button>
+            <button class="filter-tab" data-due="week">이번 주 <span class="count" id="due-count-week">0</span></button>
+            <button class="filter-tab filter-tab--danger" data-due="overdue">마감 초과 <span class="count" id="due-count-overdue">0</span></button>
+          </div>
+        </div>
+        <div class="toolbar__right">
+          <label class="inline-label" for="sort-select">정렬</label>
+          <select class="select" id="sort-select">
+            <option value="created">등록순</option>
+            <option value="due">마감일 임박순</option>
+            <option value="priority">우선순위순</option>
+            <option value="text">이름순</option>
+          </select>
+          <button class="btn-ghost btn-ghost--sm" id="sort-dir-btn" type="button" title="정렬 방향 전환">↑ 오름차순</button>
+          <label class="check-label"><input type="checkbox" id="pin-overdue" /> 마감 초과 상단 고정</label>
         </div>
       </div>
 
@@ -123,10 +147,10 @@
           <thead>
             <tr>
               <th class="th-check"></th>
-              <th class="th-title">할 일</th>
+              <th class="th-title sortable" data-sort="text" tabindex="0" title="클릭하여 정렬">할 일 <span class="sort-ind"></span></th>
               <th class="th-cat">카테고리</th>
-              <th class="th-pri">우선순위</th>
-              <th class="th-due">마감일</th>
+              <th class="th-pri sortable" data-sort="priority" tabindex="0" title="클릭하여 정렬">우선순위 <span class="sort-ind"></span></th>
+              <th class="th-due sortable" data-sort="due" tabindex="0" title="클릭하여 정렬">마감일 <span class="sort-ind"></span></th>
               <th class="th-act">액션</th>
             </tr>
           </thead>
@@ -138,6 +162,14 @@
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
+
+<!-- 실행 취소 토스트 (v1.1 #5) -->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span class="toast__msg" id="toast-msg"></span>
+  <button class="toast__undo" id="toast-undo" type="button">실행 취소</button>
+  <button class="toast__close" id="toast-close" type="button" aria-label="닫기">×</button>
+  <div class="toast__bar"></div>
+</div>
 
 <script src="script.js"></script>
 </body>
